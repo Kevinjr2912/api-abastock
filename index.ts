@@ -1,6 +1,7 @@
-import { Request, Response } from "express";
 import ExpressServer from "./server/expressServer";
 import { config } from "./src/core/Config";
+import { errorHandler } from "./src/core/shared/middlewares/ErrorHandler_middleware";
+import { authRouter } from "./src/resources/authentication/infraestructure/routes/auth_routes";
 
 const HOST: string = '0.0.0.0';
 const PORT: number = config.PORT_SERVER;
@@ -8,9 +9,8 @@ const PORT: number = config.PORT_SERVER;
 async function bootstrap() {
   const server = new ExpressServer(HOST, PORT);
 
-  server.getExpress().use('/api/v1/', (req: Request, res: Response) => {
-    res.json({ message: 'Hello, World!' });
-  });
+  server.getExpress().use('/api/v1/auth', authRouter);
+  server.getExpress().use(errorHandler);
 
   try {
     await server.listen();

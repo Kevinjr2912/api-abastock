@@ -12,8 +12,9 @@ class ExpressServer implements Express {
   constructor(host: string, port: number) {
     this.host = host;
     this.port = port;
-
     this.express = express();
+    this.express.use(express.json());
+    this.express.use(express.urlencoded({ extended: true }));
   }
 
   public getExpress(): express.Express {
