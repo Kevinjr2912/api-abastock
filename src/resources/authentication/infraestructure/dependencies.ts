@@ -21,7 +21,7 @@ const authQueryPostgreSQL = new AuthQueryPostgreSQL();
  
 // services
 const bcryptService = new BcryptService(bcrypt);
-const jwtService = new JWTService(jwt);
+export const jwtService = new JWTService(jwt);
 const sha256Service = new SHA256Service(sha256);
 
 // handlers

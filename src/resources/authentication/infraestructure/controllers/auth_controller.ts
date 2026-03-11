@@ -12,6 +12,7 @@ export class AuthController {
     // Post /auth/sign-up
     async signUp(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
+            console.log("Hola desde registro", req.body)
             const command = new SignUpCommand(req.body);
             await this.commandBus.dispatch(command);
             res.status(201).json({ message: "User created successfully" });
@@ -23,8 +24,8 @@ export class AuthController {
     // Post /auth/sign-in
     async signIn(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
+            console.log("Hola desde login", req.body);
             const query = new SignInQuery(req.body);
-            console.log(query)
             const token = await this.queryBus.ask(query);
             res.status(200).json({ "Token": token });
         } catch (error) {
@@ -36,6 +37,7 @@ export class AuthController {
     // POST /auth/refresh-token
     async refresh(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
+            console.log("Hola desde refresh")
             const { refreshToken } = req.body;
 
             if (!refreshToken) {
