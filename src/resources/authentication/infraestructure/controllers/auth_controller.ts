@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { SignUpCommand } from "../../application/commands/SignUpCommand";
 import { SignInQuery } from "../../application/queries/SignInQuery";
+import { RefreshTokenQuery } from "../../application/queries/RefreshTokenQuery";
 
 export class AuthController {
     constructor (
@@ -23,9 +24,30 @@ export class AuthController {
     async signIn(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
             const query = new SignInQuery(req.body);
+            console.log(query)
             const token = await this.queryBus.ask(query);
             res.status(200).json({ "Token": token });
         } catch (error) {
+            console.log(error)
+            next(error);
+        }
+    }
+
+    // POST /auth/refresh-token
+    async refresh(req: Request, res: Response, next: NextFunction): Promise<void> {
+        try {
+            const { refreshToken } = req.body;
+
+            if (!refreshToken) {
+                res.status(401).json({ error: "Refresh token not provided" });
+                return;
+            }
+
+            const query = new RefreshTokenQuery(refreshToken);
+            const tokens = await this.queryBus.ask(query);
+            res.status(200).json(tokens);
+        } catch (error) {
+            console.log(error)
             next(error);
         }
     }

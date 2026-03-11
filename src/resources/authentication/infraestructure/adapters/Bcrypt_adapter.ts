@@ -1,8 +1,8 @@
 import bcrypt from "bcrypt";
-import { BcryptPort } from "../../application/ports/IBcrypt_port";
+import { HashPort } from "../../application/ports/IHash_port";
 import { config } from "../../../../core/Config";
 
-export class Bcrypt implements BcryptPort {
+export class Bcrypt implements HashPort {
     async hash(password: string): Promise<string> {
         const salt = await bcrypt.genSalt(Number(config.SALT));
         const hashPassword = await bcrypt.hash(password, salt);
