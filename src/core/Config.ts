@@ -10,6 +10,7 @@ const ConfigSchema = z.object({
   DB_DATABASE: z.string(),
   DB_PORT: z.coerce.number(),
   SECRET_KEY: z.string(),
+  REFRESH_SECRET: z.string(),
   SALT: z.string(),
   PORT_SERVER: z.coerce.number().default(3000),
 });

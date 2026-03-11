@@ -1,18 +1,19 @@
 import { CommandBus } from "../core/shared/interfaces/bus/CommandBus";
 import { QueryBus } from "../core/shared/interfaces/bus/QueryBus";
 import { AuthController } from "./authentication/infraestructure/controllers/auth_controller";
-import { signInQueryHandler, signUpCommandHandler } from "./authentication/infraestructure/dependencies";
+import { refreshTokenQueryHandler, signInQueryHandler, signUpCommandHandler } from "./authentication/infraestructure/dependencies";
 
 // buses
 export const commandBus = new CommandBus();
 export const queryBus = new QueryBus()
 
-// 1. Registrar handlers
+// Registrar handlers
 // commands
 commandBus.register("SignUpCommand", signUpCommandHandler);
 
 // queries
 queryBus.register("SignInQuery", signInQueryHandler);
+queryBus.register("RefreshTokenQuery", refreshTokenQueryHandler);
 
-// 2. Crear controllers con el bus
+// Crear controllers con el bus
 export const authController = new AuthController(commandBus, queryBus);

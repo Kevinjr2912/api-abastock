@@ -43,4 +43,23 @@ export class AuthCommandPostgreSQL implements AuthCommandRepository {
         const result = await this.conn.query(sql, [email]);
         return result.rows[0].exists;
     }
+
+    async saveRefreshToken(userId: string, tokenHash: string, expiresAt: Date): Promise<void> {
+        const sql = `
+            INSERT INTO refresh_tokens (user_id, token_hash, expires_at)
+            VALUES ($1, $2, $3)
+        `;
+        await this.conn.query(sql, [userId, tokenHash, expiresAt]);
+    }
+
+    async revokeRefreshToken(id: string): Promise<void> {
+        const sql = `UPDATE refresh_tokens SET revoked_at = NOW() WHERE id = $1`;
+        await this.conn.query(sql, [id]);
+    }
+
+    async revokeAllUserTokens(userId: string): Promise<void> {
+        const sql = `UPDATE refresh_tokens SET revoked_at = NOW() WHERE user_id = $1 AND revoked_at IS NULL`;
+        await this.conn.query(sql, [userId]);
+    }
+    
 }

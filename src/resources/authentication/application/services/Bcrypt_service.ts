@@ -1,13 +1,13 @@
-import { BcryptPort } from "../ports/IBcrypt_port";
+import { HashPort } from "../ports/IHash_port";
 
 export class BcryptService {
-  constructor(private readonly bcryptPort: BcryptPort) {}
+  constructor(private readonly hashPort: HashPort) {}
 
   async comparePassword(plainPassword: string, hashedPassword: string): Promise<boolean> {
-    return this.bcryptPort.compare(plainPassword, hashedPassword);
+    return this.hashPort.compare(plainPassword, hashedPassword);
   }
 
   async hashPassword(plainPassword: string): Promise<string> {
-    return this.bcryptPort.hash(plainPassword);
+    return this.hashPort.hash(plainPassword);
   }
 }

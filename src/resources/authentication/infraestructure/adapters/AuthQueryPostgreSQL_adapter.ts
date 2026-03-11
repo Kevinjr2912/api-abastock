@@ -1,4 +1,5 @@
 import { Postgresql } from "../../../../core/database/PostgreSQL"
+import { User } from "../../../users/domain/entities/User"
 import { AuthUserDto } from "../../application/dtos/outputs/AuthUser_dto"
 import { AuthQueryRepository } from "../../application/ports/IAuthQuery_repository"
 
@@ -52,5 +53,43 @@ export class AuthQueryPostgreSQL implements AuthQueryRepository {
       storeId: row.store_id,
       storeName: row.store_name
     }
+  }
+
+  async findById(userId: string): Promise<any> {
+    const sql = `
+        SELECT 
+            u.user_id,
+            u.first_name,
+            u.middle_name,
+            u.first_surname,
+            u.second_last_name,
+            u.phone_number,
+            u.email
+        FROM users u
+        WHERE u.user_id = $1
+    `;
+    
+    const result = await this.conn.query(sql, [userId]);
+    if (result.rowCount === 0) return null;
+    return result.rows[0];
+  }
+
+  async findRefreshToken(userId: string, tokenHash: string): Promise<{ id: string; revokedAt: Date | null } | null> {
+    const sql = `
+        SELECT 
+            id, revoked_at
+        FROM refresh_tokens
+        WHERE user_id = $1 
+        AND token_hash = $2
+        AND expires_at > NOW()
+    `;
+
+    const result = await this.conn.query(sql, [userId, tokenHash]);
+    if (result.rowCount === 0) return null;
+
+    return {
+        id: result.rows[0].id,
+        revokedAt: result.rows[0].revoked_at
+    };
   }
 }

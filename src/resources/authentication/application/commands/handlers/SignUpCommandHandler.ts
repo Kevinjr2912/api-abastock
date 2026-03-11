@@ -1,13 +1,13 @@
 import { ExistingEmailError } from "../../../../../core/shared/errors/ExistingEmail_error";
+import { AuthCommandRepository } from "../../../domain/repositories/IAuthCommand_repository";
 
 import { AuthMapper } from "../../mappers/Auth_mapper";
 import { BcryptService } from "../../services/Bcrypt_service";
 import { SignUpCommand } from "../SignUpCommand";
-import { AuthWriteRepository } from '../../../domain/repositories/IAuthCommand_repository';
 
 export class SignUpCommandHandler implements ICommandHandler<SignUpCommand> {
   constructor(
-    private readonly authRepository: AuthWriteRepository,
+    private readonly authRepository: AuthCommandRepository,
     private readonly bcryptService: BcryptService
   ) {}
 
