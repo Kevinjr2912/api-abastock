@@ -5,7 +5,7 @@ import { refreshTokenQueryHandler, signInQueryHandler, signUpCommandHandler } fr
 import { createStoreCommandHandler } from "./stores/infraestructure/dependencies";
 import { StoreController } from "./stores/infraestructure/controllers/stores_controller";
 import { ProductController } from "./products/infraestructure/controllers/Product_controller";
-import { createProductCommandHandler } from "./products/infraestructure/dependencies";
+import { createProductCommandHandler, getBrandsQueryHandler, getCategoriesQueryHandler } from "./products/infraestructure/dependencies";
 
 // buses
 export const commandBus = new CommandBus();
@@ -20,8 +20,10 @@ commandBus.register("CreateProductCommand", createProductCommandHandler);
 // queries
 queryBus.register("SignInQuery", signInQueryHandler);
 queryBus.register("RefreshTokenQuery", refreshTokenQueryHandler);
+queryBus.register("GetCategoriesQuery", getCategoriesQueryHandler);
+queryBus.register("GetBrandsQuery", getBrandsQueryHandler);
 
 // Crear controllers con el bus
 export const authController = new AuthController(commandBus, queryBus);
 export const storeController = new StoreController(commandBus);
-export const productController = new ProductController(commandBus);
+export const productController = new ProductController(commandBus, queryBus);

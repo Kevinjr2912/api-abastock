@@ -1,0 +1,1 @@
+export class GetCategoriesQuery implements IQuery<any> {}
