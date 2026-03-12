@@ -12,14 +12,10 @@ const ConfigSchema = z.object({
   SECRET_KEY: z.string(),
   REFRESH_SECRET: z.string(),
   SALT: z.string(),
+  CLOUDINARY_API_KEY: z.string(),
+  CLOUDINARY_API_SECRET: z.string(),
+  CLOUDINARY_CLOUD_NAME: z.string(),
   PORT_SERVER: z.coerce.number().default(3000),
 });
 
-const result = ConfigSchema.safeParse(process.env);
-
-if (!result.success) {
-  console.error("Invalid env:", result.error.issues);
-  process.exit(1);
-}
-
-export const config = result.data;
+export const config = ConfigSchema.parse(process.env);

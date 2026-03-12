@@ -1,6 +1,6 @@
 import bcrypt from "bcrypt";
 import { HashPort } from "../../application/ports/IHash_port";
-import { config } from "../../../../core/Config";
+import { config } from "../../../../core/configs/Config";
 
 export class Bcrypt implements HashPort {
     async hash(password: string): Promise<string> {

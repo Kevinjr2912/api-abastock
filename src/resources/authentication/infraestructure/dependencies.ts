@@ -1,4 +1,4 @@
-import { config } from "../../../core/Config";
+import { config } from "../../../core/configs/Config";
 import { SignUpCommandHandler } from "../application/commands/handlers/SignUpCommandHandler";
 import { RefreshTokenQueryHandler } from "../application/queries/handlers/RefreshTokenQueryHandler";
 import { SignInQueryHandler } from "../application/queries/handlers/SignInQueryHandler";

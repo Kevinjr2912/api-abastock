@@ -1,5 +1,5 @@
 import { Pool, PoolClient, QueryResult } from "pg";
-import { config } from "../Config";
+import { config } from "../configs/Config";
 
 export class Postgresql {
   
