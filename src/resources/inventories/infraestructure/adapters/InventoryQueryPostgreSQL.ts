@@ -14,6 +14,7 @@ export class InventoryQueryPostgreSQL implements InventoryQueryRepository {
         b.name AS brand_name,
         c.name AS category_name,
         pp.image_uri,
+        pp.presentation_id,
         pp.value,
         pp.unit,
         pb.barcode
