@@ -1,5 +1,5 @@
 import { Postgresql } from "../../../../core/database/PostgreSQL";
-import { InventoryProductDto } from "../../application/dtos/InventoryProduct_dto";
+import { InventoryProductDto } from "../../application/dtos/outputs/InventoryProduct_dto";
 import { InventoryQueryRepository } from "../../application/ports/IInventory_repository";
 
 export class InventoryQueryPostgreSQL implements InventoryQueryRepository {
@@ -31,6 +31,34 @@ export class InventoryQueryPostgreSQL implements InventoryQueryRepository {
     `;
     const result = await this.conn.query(sql, [storeId, barcode]);
     return result.rowCount ? result.rows[0] : null;
+  }
+
+  async findByStore(storeId: string): Promise<InventoryProductDto[]> {
+    const sql = `
+      SELECT DISTINCT ON (pp.presentation_id)
+        i.inventory_id,
+        i.current_stock,
+        pp.presentation_id,
+        p.name AS product_name,
+        b.name AS brand_name,
+        c.name AS category_name,
+        pp.sale_price,
+        pp.image_uri,
+        pp.value,
+        pp.unit,
+        pb.barcode
+      FROM inventory i
+      JOIN product_presentations pp ON pp.presentation_id = i.presentation_id
+      JOIN products p ON p.product_id = pp.product_id
+      JOIN brands b ON b.brand_id = p.brand_id
+      JOIN categories c ON c.category_id = p.category_id
+      LEFT JOIN product_barcodes pb ON pb.presentation_id = pp.presentation_id AND pb.is_active = true
+      WHERE i.store_id = $1
+      ORDER BY pp.presentation_id, pb.barcode
+    `;
+
+    const result = await this.conn.query(sql, [storeId]);
+    return result.rows;
   }
 
   async findInventoryByStoreAndPresentation(storeId: string, presentationId: string): Promise<{inventoryId: string, currentStock: number, minStockAlert: number} | null> {

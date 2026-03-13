@@ -1,4 +1,5 @@
 import { FindProductByBarcodeQueryHandler } from "../application/queries/handlers/FindProductByBarcodeQueryHandler";
+import { ListInventoryProductsQueryHandler } from "../application/queries/handlers/ListInventoryProductsQueryHandler";
 import { InventoryCommandPostgreSQL } from "./adapters/InventoryCommandPostgreSQL";
 import { InventoryQueryPostgreSQL } from "./adapters/InventoryQueryPostgreSQL";
 
@@ -9,3 +10,4 @@ export { inventoryQueryPostgreSQL };
 
 // handlers
 export const findProductByBarcodeQueryHandler = new FindProductByBarcodeQueryHandler(inventoryQueryPostgreSQL);
+export const listInventoryProductsQueryHandler = new ListInventoryProductsQueryHandler(inventoryQueryPostgreSQL);
