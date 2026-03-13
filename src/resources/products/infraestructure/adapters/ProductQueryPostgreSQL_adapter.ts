@@ -53,6 +53,7 @@ export class ProductQueryPostgreSQL implements ProductQueryRepository {
         }));
     }
 
+
     async getBrands(): Promise<BrandDto[]> {
         const sql = `
             SELECT brand_id, name

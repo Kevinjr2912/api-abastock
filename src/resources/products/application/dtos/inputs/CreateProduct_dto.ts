@@ -1,4 +1,5 @@
 export interface CreateProductDto {
+  storeId:          string;  
   productId:        string;
   name:             string;
   brandId:          string;

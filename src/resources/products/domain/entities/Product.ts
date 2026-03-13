@@ -21,4 +21,8 @@ export class Product {
   getId(): string {
     return this.productId;
   }
+
+  getName(): string {
+    return this.name;
+  }
 }

@@ -1,7 +1,7 @@
 export class CommandBus implements ICommandBus {
-  private handlers = new Map<string, ICommandHandler<any>>();
+  private handlers = new Map<string, ICommandHandler<any, any>>();
 
-  register<T extends ICommand>(commandName: string, handler: ICommandHandler<T>) {
+  register<T extends ICommand, R = void>(commandName: string, handler: ICommandHandler<T, R>) {
     this.handlers.set(commandName, handler);
   }
 
