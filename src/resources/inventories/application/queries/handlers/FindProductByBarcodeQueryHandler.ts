@@ -1,4 +1,4 @@
-import { InventoryProductDto } from "../../dtos/InventoryProduct_dto";
+import { InventoryProductDto } from "../../dtos/outputs/InventoryProduct_dto";
 import { InventoryQueryRepository } from "../../ports/IInventory_repository";
 import { FindProductByBarcodeQuery } from "../FindProductByBarcodeQuery";
 

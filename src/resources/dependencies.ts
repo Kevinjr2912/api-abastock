@@ -7,7 +7,7 @@ import { StoreController } from "./stores/infraestructure/controllers/stores_con
 import { ProductController } from "./products/infraestructure/controllers/Product_controller";
 import { createProductCommandHandler, getBrandsQueryHandler, getCategoriesQueryHandler } from "./products/infraestructure/dependencies";
 import { InventoryController } from "./inventories/infraestructure/controllers/Inventory_controller";
-import { findProductByBarcodeQueryHandler } from "./inventories/infraestructure/dependencies";
+import { findProductByBarcodeQueryHandler, listInventoryProductsQueryHandler } from "./inventories/infraestructure/dependencies";
 import { createPurchaseCommandHandler } from "./purchases/infraestructure/dependencies";
 import { PurchaseController } from "./purchases/infraestructure/controllers/Purchase_controller";
 
@@ -28,6 +28,7 @@ queryBus.register("RefreshTokenQuery", refreshTokenQueryHandler);
 queryBus.register("GetCategoriesQuery", getCategoriesQueryHandler);
 queryBus.register("GetBrandsQuery", getBrandsQueryHandler);
 queryBus.register("FindProductByBarcodeQuery", findProductByBarcodeQueryHandler);
+queryBus.register("ListInventoryProductsQuery", listInventoryProductsQueryHandler);
 
 // Crear controllers con el bus
 export const authController = new AuthController(commandBus, queryBus);
