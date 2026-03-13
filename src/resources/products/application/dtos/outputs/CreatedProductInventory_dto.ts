@@ -1,10 +1,15 @@
 export interface CreatedProductInventoryDto {
   inventoryId: string;
-  productName: string;
-  brandId: string;
-  categoryId: string;
-  imageUri: string;
-  value: number;
-  unit: string;
-  salePrice: number;
+  product : {
+    productName: string;
+    brandId: string;
+    categoryId: string;
+  },
+  productPresentation : {
+    barCode: number;
+    imageUri: string;
+    value: number;
+    unit: string;
+    stock: number
+  }
 }
