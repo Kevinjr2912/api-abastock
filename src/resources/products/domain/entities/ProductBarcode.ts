@@ -13,4 +13,16 @@ export class ProductBarcode {
   getId(): string {
     return this.productBarcodeId;
   }
+
+  getPresentationId(): string {
+    return this.presentationId;
+  }
+
+  getBarcode(): string {
+    return this.barcode;
+  }
+
+  getIsActive(): boolean {
+    return this.isActive;
+  }
 }

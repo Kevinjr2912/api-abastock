@@ -1,5 +1,6 @@
 import { Postgresql } from "../../../../core/database/PostgreSQL";
-import { InventoryCommandRepository } from "../../application/domain/repositories/IInventoryCommand_repository";
+import { Inventory } from "../../domain/entities/Inventory";
+import { InventoryCommandRepository } from "../../domain/repositories/IInventoryCommand_repository";
 
 export class InventoryCommandPostgreSQL implements InventoryCommandRepository {
     private readonly conn = Postgresql.getInstance();
@@ -19,5 +20,19 @@ export class InventoryCommandPostgreSQL implements InventoryCommandRepository {
         ]);
 
         return result.rows[0].inventory_id;
+    }
+
+    async updateInventory(inventory: Inventory): Promise<void> {
+        console.log("Updating inventory:", inventory);
+        const sql = `
+            UPDATE inventory
+            SET current_stock = current_stock + $1
+            WHERE inventory_id = $2
+        `;
+        
+        await this.conn.query(sql, [
+            inventory.getCurrentStock(),
+            inventory.getId()
+        ]);
     }
 }

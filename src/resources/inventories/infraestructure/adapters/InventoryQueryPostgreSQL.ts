@@ -31,4 +31,17 @@ export class InventoryQueryPostgreSQL implements InventoryQueryRepository {
     const result = await this.conn.query(sql, [storeId, barcode]);
     return result.rowCount ? result.rows[0] : null;
   }
+
+  async findInventoryByStoreAndPresentation(storeId: string, presentationId: string): Promise<{inventoryId: string, currentStock: number, minStockAlert: number} | null> {
+
+    const sql = `
+      SELECT inventory_id, current_stock, min_stock_alert
+      FROM inventory
+      WHERE store_id = $1 AND presentation_id = $2
+      LIMIT 1
+    `;
+
+    const result = await this.conn.query(sql, [storeId, presentationId]);
+    return result.rowCount ? result.rows[0] : null;
+  }
 }

@@ -5,6 +5,7 @@ import { authRouter } from "./src/resources/authentication/infraestructure/route
 import { storesRouter } from "./src/resources/stores/infraestructure/routes/stores_routes";
 import { productRouter } from "./src/resources/products/infraestructure/routes/Product_routes";
 import { inventoryRouter } from "./src/resources/inventories/infraestructure/routes/Inventory_routes";
+import { purchaseRouter } from "./src/resources/purchases/infraestructure/routes/Purchase_routes";
 
 const HOST: string = '0.0.0.0';
 const PORT: number = config.PORT_SERVER;
@@ -16,6 +17,7 @@ async function bootstrap() {
   server.getExpress().use('/api/v1/stores', storesRouter);
   server.getExpress().use('/api/v1/products', productRouter);
   server.getExpress().use('/api/v1/inventories', inventoryRouter);
+  server.getExpress().use('/api/v1/purchases', purchaseRouter);
   server.getExpress().use(errorHandler);
 
   try {

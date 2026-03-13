@@ -3,8 +3,9 @@ import { InventoryCommandPostgreSQL } from "./adapters/InventoryCommandPostgreSQ
 import { InventoryQueryPostgreSQL } from "./adapters/InventoryQueryPostgreSQL";
 
 // adapters
-const inventoryQueryPostgtreSQL = new InventoryQueryPostgreSQL();
+const inventoryQueryPostgreSQL = new InventoryQueryPostgreSQL();
 export const inventoryCommandPostgreSQL = new InventoryCommandPostgreSQL();
+export { inventoryQueryPostgreSQL };
 
 // handlers
-export const findProductByBarcodeQueryHandler = new FindProductByBarcodeQueryHandler(inventoryQueryPostgtreSQL);
+export const findProductByBarcodeQueryHandler = new FindProductByBarcodeQueryHandler(inventoryQueryPostgreSQL);
