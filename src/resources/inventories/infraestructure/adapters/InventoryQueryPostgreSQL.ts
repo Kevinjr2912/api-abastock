@@ -9,13 +9,14 @@ export class InventoryQueryPostgreSQL implements InventoryQueryRepository {
     const sql = `
       SELECT 
         i.inventory_id,
+        i.current_stock,
         p.name AS product_name,
         b.name AS brand_name,
         c.name AS category_name,
         pp.image_uri,
         pp.value,
         pp.unit,
-        pp.sale_price
+        pb.barcode
       FROM inventory i
       JOIN product_presentations pp ON pp.presentation_id = i.presentation_id
       JOIN products p ON p.product_id = pp.product_id

@@ -35,13 +35,18 @@ export class CreateProductCommandHandler implements ICommandHandler<CreateProduc
 
     return {
       inventoryId,
-      productName: product.getName(),
-      brandId: brandId,
-      categoryId: categoryId,
-      imageUri: presentationEntity.getImageUri(),
-      value: presentationEntity.getValue(),
-      unit: presentationEntity.getUnit(),
-      salePrice: presentationEntity.getSalePrice(),
+      product: {
+        productName: product.getName(),
+        brandId: brandId,
+        categoryId: categoryId
+      },
+      productPresentation: {
+        barCode: Number(presentationEntity.getBarcodes()[0].barcode),
+        imageUri: presentationEntity.getImageUri(),
+        value: presentationEntity.getValue(),
+        unit: presentationEntity.getUnit(),
+        stock: 0
+      }
     };
   }
 
@@ -53,6 +58,7 @@ export class CreateProductCommandHandler implements ICommandHandler<CreateProduc
       presentation.value,
       presentation.unit,
     );
+
 
     if (exists) {
       throw new ExistingProductPresentationError();

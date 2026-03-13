@@ -20,6 +20,7 @@ export class InventoryController {
 
       res.status(200).json(product);
     } catch (error) {
+      console.log(error)
       next(error);
     }
   }
