@@ -4,4 +4,5 @@ import { ProductPresentation } from "../entities/ProductPresentation";
 export interface ProductCommandRepository {
     save(product: Product): Promise<void>;
     addPresentation(productId: string, pres: ProductPresentation): Promise<void>;
+    updateSalePrice(presentationId: string, salePrice: number): Promise<void>;
 }

@@ -4,6 +4,7 @@ import { ProductPresentation } from "../../domain/entities/ProductPresentation";
 import { ProductCommandRepository } from "../../domain/repositories/IProductCommand_repository";
 
 export class ProductCommandPostgreSQL implements ProductCommandRepository {
+
     private readonly conn = Postgresql.getInstance();
 
     async save(product: Product): Promise<void> {
@@ -87,6 +88,20 @@ export class ProductCommandPostgreSQL implements ProductCommandRepository {
                 barcode.barcode,
                 barcode.isActive
             ]);
+        }
+    }
+
+    async updateSalePrice(presentationId: string, salePrice: number): Promise<void> {
+        const sql = `
+            UPDATE product_presentations
+            SET sale_price = $1
+            WHERE presentation_id = $2
+        `;
+
+        const result = await this.conn.query(sql, [salePrice, presentationId]);
+        
+        if (result.rowCount === 0) {
+            throw new Error(`Presentation with ID not found: ${presentationId}`);
         }
     }
 }

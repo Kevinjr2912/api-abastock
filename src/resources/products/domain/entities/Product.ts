@@ -25,4 +25,12 @@ export class Product {
   getName(): string {
     return this.name;
   }
+
+  getCategoryId(): string {
+    return this.categoryId;
+  }
+
+  getBrandId(): string {
+    return this.brandId;
+  }
 }

@@ -8,7 +8,7 @@ import { ProductCommandPostgreSQL } from "./adapters/ProductCommandPostgreSQL_ad
 import { ProductQueryPostgreSQL } from "./adapters/ProductQueryPostgreSQL_adapter";
 
 // adapters
-const productCommandPostgreSQL = new ProductCommandPostgreSQL();
+export const productCommandPostgreSQL = new ProductCommandPostgreSQL();
 const productQueryPostgreSQL = new ProductQueryPostgreSQL();
 const cloudinary = new Cloudinary();
 
