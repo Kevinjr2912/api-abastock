@@ -4,7 +4,7 @@ import { ProductQueryRepository } from "../../ports/IProductQuery_repository";
 import { ImageStorageService } from "../../services/ImageStorage_service";
 import { CreateProductCommand } from "../CreateProductCommand";
 import { ExistingProductPresentationError } from '../../../domain/errors/ExistingProductPresentation_error';
-import { InventoryCommandRepository } from "../../../../inventory/application/domain/repositories/IInventoryCommand_repository";
+import { InventoryCommandRepository } from "../../../../inventories/application/domain/repositories/IInventoryCommand_repository";
 import { CreatedProductInventoryDto } from "../../dtos/outputs/CreatedProductInventory_dto";
 import { Product } from "../../../domain/entities/Product";
 import { ProductPresentation } from "../../../domain/entities/ProductPresentation";

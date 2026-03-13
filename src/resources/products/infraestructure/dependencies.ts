@@ -1,4 +1,4 @@
-import { inventoryCommandPostgreSQL } from "../../inventory/infraestructure/dependencies";
+import { inventoryCommandPostgreSQL } from "../../inventories/infraestructure/dependencies";
 import { CreateProductCommandHandler } from "../application/commands/handlers/CreateProductCommandHandler";
 import { GetBrandsQueryHandler } from "../application/queries/handlers/GetBrandsQueryHandler";
 import { GetCategoriesQueryHandler } from "../application/queries/handlers/GetCategoriesQueryHandler";

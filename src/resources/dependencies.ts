@@ -6,8 +6,8 @@ import { createStoreCommandHandler } from "./stores/infraestructure/dependencies
 import { StoreController } from "./stores/infraestructure/controllers/stores_controller";
 import { ProductController } from "./products/infraestructure/controllers/Product_controller";
 import { createProductCommandHandler, getBrandsQueryHandler, getCategoriesQueryHandler } from "./products/infraestructure/dependencies";
-import { InventoryController } from "./inventory/infraestructure/controllers/Inventory_controller";
-import { findProductByBarcodeQueryHandler } from "./inventory/infraestructure/dependencies";
+import { InventoryController } from "./inventories/infraestructure/controllers/Inventory_controller";
+import { findProductByBarcodeQueryHandler } from "./inventories/infraestructure/dependencies";
 
 // buses
 export const commandBus = new CommandBus();
