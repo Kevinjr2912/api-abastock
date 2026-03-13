@@ -4,62 +4,71 @@ import { ProductQueryRepository } from "../../ports/IProductQuery_repository";
 import { ImageStorageService } from "../../services/ImageStorage_service";
 import { CreateProductCommand } from "../CreateProductCommand";
 import { ExistingProductPresentationError } from '../../../domain/errors/ExistingProductPresentation_error';
+import { InventoryCommandRepository } from "../../../../inventory/application/domain/repositories/IInventoryCommand_repository";
+import { CreatedProductInventoryDto } from "../../dtos/outputs/CreatedProductInventory_dto";
+import { Product } from "../../../domain/entities/Product";
+import { ProductPresentation } from "../../../domain/entities/ProductPresentation";
 
-export class CreateProductCommandHandler implements ICommandHandler<CreateProductCommand> {
+export class CreateProductCommandHandler implements ICommandHandler<CreateProductCommand, CreatedProductInventoryDto> {
   constructor(
     private readonly productCommandRepository: ProductCommandRepository,
     private readonly productQueryRepository: ProductQueryRepository,
+    private readonly inventoryCommandRepository: InventoryCommandRepository,
     private readonly imageStorageService: ImageStorageService,
   ) {}
 
-  async handle(command: CreateProductCommand): Promise<void> {
+  async handle(command: CreateProductCommand): Promise<CreatedProductInventoryDto>  {
+    const { name, brandId, categoryId, presentation, storeId } = command.payload;
 
-    const existingProduct =
-      await this.productQueryRepository.findByNameBrandCategory(
-        command.payload.name,
-        command.payload.brandId,
-        command.payload.categoryId,
-      );
+    const existingProduct = await this.productQueryRepository.findByNameBrandCategory(name,brandId,categoryId);
 
-    // Si el producto existe validamos presentación antes de guardar imagen
-    if (existingProduct) {
+    await this.ensurePresentationDoesNotExist(existingProduct?.getId(), presentation);
 
-      const presentationExists =
-        await this.productQueryRepository.findPresentation(
-          existingProduct.getId(),
-          command.payload.presentation.value,
-          command.payload.presentation.unit,
-        );
+    const imageUri = await this.imageStorageService.saveImage(command.imagePath);
 
-      if (presentationExists) {
-        throw new ExistingProductPresentationError();
-      }
-    }
+    const product = ProductMapper.fromCreateCommand(command, imageUri, existingProduct);
+    const presentationEntity = product.getPresentations()[0];
 
-    // Guardamos imagen solo cuando ya sabemos que se puede crear
-    const imageUri = await this.imageStorageService.saveImage(
-      command.imagePath,
+    await this.persistProduct(existingProduct, product, presentationEntity);
+
+    const inventoryId = await this.inventoryCommandRepository.addInventory(storeId,presentationEntity.getId(),0,0);
+
+    return {
+      inventoryId,
+      productName: product.getName(),
+      brandId: brandId,
+      categoryId: categoryId,
+      imageUri: presentationEntity.getImageUri(),
+      value: presentationEntity.getValue(),
+      unit: presentationEntity.getUnit(),
+      salePrice: presentationEntity.getSalePrice(),
+    };
+  }
+
+  private async ensurePresentationDoesNotExist(productId: string | undefined, presentation: { value: number; unit: string }): Promise<void> {
+    if (!productId) return;
+
+    const exists = await this.productQueryRepository.findPresentation(
+      productId,
+      presentation.value,
+      presentation.unit,
     );
 
-    const product = ProductMapper.fromCreateCommand(
-      command,
-      imageUri,
-      existingProduct,
-    );
-
-    if (existingProduct) {
-
-      const productPresentation = product.getPresentations()[0];
-
-      await this.productCommandRepository.addPresentation(
-        existingProduct.getId(),
-        productPresentation,
-      );
-
-    } else {
-
-      await this.productCommandRepository.save(product);
-
+    if (exists) {
+      throw new ExistingProductPresentationError();
     }
+  }
+
+  private async persistProduct(
+    existingProduct: Product | null,
+    product: Product,
+    presentation: ProductPresentation,
+  ): Promise<void> {
+    if (existingProduct) {
+      await this.productCommandRepository.addPresentation(existingProduct.getId(), presentation);
+      return;
+    }
+
+    await this.productCommandRepository.save(product);
   }
 }

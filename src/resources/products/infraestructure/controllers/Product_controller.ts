@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from "express";
+import fs from 'fs';
 import { upload } from "../../../../core/shared/middlewares/Multer_middleware";
 import { CreateProductCommand } from "../../application/commands/CreateProductCommand";
 import { GetCategoriesQuery } from "../../application/queries/GetCategoriesQuery";
@@ -26,12 +27,15 @@ export class ProductController {
                 const data = JSON.parse(req.body.data);
                 const command = new CreateProductCommand(data, req.file.path);
 
-                await this.commandBus.dispatch(command);
+                const result = await this.commandBus.dispatch(command);
 
-                res.status(201).json({ message: "Product created successfully" });
+                res.status(201).json({ "data": result });
 
             } catch (error) {
                 console.log(error)
+                if (req.file) {
+                    await fs.promises.unlink(req.file.path);
+                }
                 next(error);
             }
         });

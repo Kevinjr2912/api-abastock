@@ -1,3 +1,4 @@
+import { inventoryCommandPostgreSQL } from "../../inventory/infraestructure/dependencies";
 import { CreateProductCommandHandler } from "../application/commands/handlers/CreateProductCommandHandler";
 import { GetBrandsQueryHandler } from "../application/queries/handlers/GetBrandsQueryHandler";
 import { GetCategoriesQueryHandler } from "../application/queries/handlers/GetCategoriesQueryHandler";
@@ -20,6 +21,7 @@ const imageStorageService = new ImageStorageService(cloudinary);
 export const createProductCommandHandler = new CreateProductCommandHandler (
     productCommandPostgreSQL,
     productQueryPostgreSQL,
+    inventoryCommandPostgreSQL,
     imageStorageService
 );
 

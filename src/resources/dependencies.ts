@@ -6,6 +6,8 @@ import { createStoreCommandHandler } from "./stores/infraestructure/dependencies
 import { StoreController } from "./stores/infraestructure/controllers/stores_controller";
 import { ProductController } from "./products/infraestructure/controllers/Product_controller";
 import { createProductCommandHandler, getBrandsQueryHandler, getCategoriesQueryHandler } from "./products/infraestructure/dependencies";
+import { InventoryController } from "./inventory/infraestructure/controllers/Inventory_controller";
+import { findProductByBarcodeQueryHandler } from "./inventory/infraestructure/dependencies";
 
 // buses
 export const commandBus = new CommandBus();
@@ -22,8 +24,10 @@ queryBus.register("SignInQuery", signInQueryHandler);
 queryBus.register("RefreshTokenQuery", refreshTokenQueryHandler);
 queryBus.register("GetCategoriesQuery", getCategoriesQueryHandler);
 queryBus.register("GetBrandsQuery", getBrandsQueryHandler);
+queryBus.register("FindProductByBarcodeQuery", findProductByBarcodeQueryHandler);
 
 // Crear controllers con el bus
 export const authController = new AuthController(commandBus, queryBus);
 export const storeController = new StoreController(commandBus);
 export const productController = new ProductController(commandBus, queryBus);
+export const inventoryController = new InventoryController(queryBus);
